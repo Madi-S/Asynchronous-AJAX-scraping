@@ -14,9 +14,13 @@ def get_lines(url):
 
 
 def write_csv(data):
-    with open('liveinternet_ajax_data.csv', 'a', newline='', encoding='utf-16') as f:
-        writer = csv.DictWriter(f, fieldnames=order)
-        writer.writerow(data)
+    with open('sync_liveinternet_ajax_data.csv', 'a', newline='', encoding='utf-8') as f:
+        try:
+            writer = csv.DictWriter(f, fieldnames=ORDER, delimiter='\t')
+            writer.writerow(data)
+
+        except UnicodeDecodeError:
+            pass
 
 
 def main():
