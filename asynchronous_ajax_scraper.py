@@ -4,7 +4,7 @@ import csv
 from time import sleep, time
 
 
-LIMIT = 6150  # 
+LIMIT = 6150 # Pagination up to 6159, 6150 is taken only for experiments
 ORDER = ['Name', 'URL', 'Description', 'Traffic', 'Percent'] # CSV Headers
 
 
