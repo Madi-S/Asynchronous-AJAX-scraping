@@ -55,4 +55,5 @@ if __name__ == "__main__":
     print(f'Speed: {speed} URLs/second')
 
 
-# 2.8 URLs per second
+# Total amount taken for 6150 URLs is 81.663 seconds
+# 75.309, 77.893  URLs per second
