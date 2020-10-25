@@ -4,24 +4,27 @@ import csv
 from time import sleep, time
 
 
-LIMIT = 6150
+LIMIT = 6150  # 
+ORDER = ['Name', 'URL', 'Description', 'Traffic', 'Percent'] # CSV Headers
 
 
+# Function to write data (dictionary) - not asynchronous method to write csv files (since no big difference and it is better to write csv files synchronously)
 def write_csv(data):
     with open('async_liveinternet_ajax_data.csv', 'a', newline='', encoding='utf-8') as f:
-        order = ['Name', 'URL', 'Description', 'Traffic', 'Percent']
-        writer = csv.DictWriter(f, fieldnames=order)
+        writer = csv.DictWriter(f, fieldnames=ORDER, delimiter='\t') # Dict writer is more preferable, since dictionary and headers is used
         writer.writerow(data)
 
-
+# Fucntion to parse the page, which takes session and page number as parameters
 async def parse(session, pageNo):
-    url = f'https://www.liveinternet.ru/rating/ru//today.tsv?page={pageNo}'
+    url = f'https://www.liveinternet.ru/rating/ru//today.tsv?page={pageNo}' # format the URL
     print(f'Parsing {url}')
     async with session.get(url) as r:
         try:
+            # Get raw (binary), then formatted content
             response = await r.read()
             data = response.decode('utf-8').strip().split('\n')[1:]
 
+            # Parsing data
             for row in data:
                 columns = row.strip().split('\t')
                 name = columns[0]
@@ -30,18 +33,21 @@ async def parse(session, pageNo):
                 traffic = columns[3]
                 percent = columns[4]
 
-                dic = {'Name': name,
-                       'URL': url,
-                       'Description': description,
-                       'Traffic': traffic,
-                       'Percent': percent}
+                data = {'Name': name,
+                        'URL': url,  
+                        'Description': description,
+                        'Traffic': traffic,
+                        'Percent': percent}
 
-                write_csv(dic)
+                # Writing data
+                write_csv(data)
 
+        # If any decoding errors occured
         except UnicodeDecodeError:
             print('UnocodeDecodeError occured')
 
 
+# Main asynchronous function, which is called and where tasks are created
 async def main():
     tasks = []
 
@@ -64,4 +70,4 @@ if __name__ == "__main__":
 
 
 # Total amount taken for 6150 URLs = 81.663 seconds
-# 75.309 URLs per second
+# 75.309, 77.893  URLs per second
