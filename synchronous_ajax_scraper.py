@@ -4,7 +4,8 @@ from time import time
 
 
 scraped_count = 0
-LIMIT = 6150
+LIMIT = 6150  # Pagination up to 6159, 6150 is taken only for experiments
+ORDER = ['Name', 'URL', 'Description', 'Traffic', 'Percent']
 
 
 def get_lines(url):
@@ -14,7 +15,6 @@ def get_lines(url):
 
 def write_csv(data):
     with open('liveinternet_ajax_data.csv', 'a', newline='', encoding='utf-16') as f:
-        order = ['Name', 'URL', 'Description', 'Traffic', 'Percent']
         writer = csv.DictWriter(f, fieldnames=order)
         writer.writerow(data)
 
