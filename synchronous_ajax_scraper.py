@@ -8,11 +8,13 @@ LIMIT = 6150  # Pagination up to 6159, 6150 is taken only for experiments
 ORDER = ['Name', 'URL', 'Description', 'Traffic', 'Percent']
 
 
+# Function to return text content of the page
 def get_lines(url):
     r = requests.get(url)
     return r.text
 
 
+# Function to write data to a csv file
 def write_csv(data):
     with open('sync_liveinternet_ajax_data.csv', 'a', newline='', encoding='utf-8') as f:
         try:
@@ -23,13 +25,15 @@ def write_csv(data):
             pass
 
 
+# Main function, which is called and where page are looped through
 def main():
     for i in range(1, LIMIT):
-        url = f'https://www.liveinternet.ru/rating/ru//today.tsv?page={i}'
+        url = f'https://www.liveinternet.ru/rating/ru//today.tsv?page={i}' # Formatting the URL
         print(f'Parsing {url}')
         response = get_lines(url)
         data = response.strip().split('\n')[1:]
 
+        # Parsing the data
         for row in data:
             columns = row.strip().split('\t')
             name = columns[0]
@@ -55,5 +59,4 @@ if __name__ == "__main__":
     print(f'Speed: {speed} URLs/second')
 
 
-# Total amount taken for 6150 URLs is 81.663 seconds
-# 75.309, 77.893  URLs per second
+# 2.8342. 2.7780 URLs per second
